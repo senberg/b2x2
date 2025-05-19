@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>b2x2</title>
+    <style>
+        html, body, canvas {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+    <script type="text/javascript" charset="utf-8" th:src="${'/wasm/classes.wasm-runtime.js'}"></script>
+    <script>
+        async function main() {
+            let teavm = await TeaVM.wasmGC.load("/wasm/classes.wasm", {
+                stackDeobfuscator: {
+                    enabled: false
+                }
+            });
+            teavm.exports.main([]);
+        }
+    </script>
+</head>
+<body onload="main()">
+</body>
+</html>
