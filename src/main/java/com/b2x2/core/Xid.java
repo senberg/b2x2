@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * 128 bit UUIDv8 based on time, a counter and randomness. Uses 115 bits of unique data.
  * <p>
- * bit 0-6. 7 unused bits always set to 0b00000000.
+ * bit 0-6. 7 unused bits always set to 0b0000000.
  * bit 7-47. 41 bit millisecond time since 2025-01-01 giving a max of 2094-09-07.
  * bit 48-51. 4 bits always set to 0b1000.
  * bit 52-63. 12 bit counter to improve the chance of multiple ids generated the same ms to be in the correct order.
@@ -44,8 +44,8 @@ public record Xid(long mostSigBits, long leastSigBits) {
 
     public Xid() {
         this(
-                getMostSigBits(System.currentTimeMillis() - TIME_ADJUSTMENT, counter.getAndIncrement() % 4096),
-                getLeastSigBits(ThreadLocalRandom.current().nextLong() >>> 2));
+                getMostSigBits(System.currentTimeMillis() - TIME_ADJUSTMENT, counter.getAndIncrement() & BIT_MASK_LONG_12),
+                getLeastSigBits(ThreadLocalRandom.current().nextLong() & BIT_MASK_LONG_62));
     }
 
     public Instant getCreatedAt() {
@@ -70,16 +70,15 @@ public record Xid(long mostSigBits, long leastSigBits) {
         return new String(buffer);
     }
 
-
     public static Xid fromString(String value) {
         if (value == null) {
             throw new IllegalArgumentException("string cannot be null");
         } else if (XID_PATTERN.matcher(value).matches()) {
             char[] chars = value.toCharArray();
-            long highBits = Base62.decode(chars, 0, chars.length - 11);
+            long highBits = Base62.decode(chars, 0, 9);
             long timeBits = highBits >>> 12;
             long counterBits = highBits & BIT_MASK_LONG_12;
-            long randomBits = Base62.decode(chars, chars.length - 11, 11);
+            long randomBits = Base62.decode(chars, 9, 11);
             return new Xid(getMostSigBits(timeBits, counterBits), getLeastSigBits(randomBits));
         } else if (UUID_PATTERN.matcher(value).matches()) {
             return fromUUID(UUID.fromString(value));
