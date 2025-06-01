@@ -15,6 +15,7 @@
 		<java.version>23</java.version>
 		<teavm.version>0.11.0</teavm.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.proc>full</maven.compiler.proc>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -39,7 +40,8 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.38</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.teavm</groupId>
@@ -90,60 +92,24 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>23</source>
-					<target>23</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>1.18.38</version>
 						</path>
 					</annotationProcessorPaths>
-					<compilerArgs>--enable-preview</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.teavm</groupId>
 				<artifactId>teavm-maven-plugin</artifactId>
 				<version>${teavm.version}</version>
 				<executions>
-					<!--execution>
-						<id>wasm-runtime</id>
-						<goals>
-							<goal>copy-webassembly-gc-runtime</goal>
-						</goals>
-						<configuration>
-							<targetDirectory>${project.build.directory}/classes/static/wasm</targetDirectory>
-						</configuration>
-					</execution>
-					<execution>
-						<id>wasm-code</id>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<mainClass>com.b2x2.client.Client</mainClass>
-							<targetDirectory>${project.build.directory}/classes/static/wasm</targetDirectory>
-							<minifying>true</minifying>
-							<debugInformationGenerated>false</debugInformationGenerated>
-							<sourceMapsGenerated>false</sourceMapsGenerated>
-							<sourceFilesCopied>false</sourceFilesCopied>
-							<incremental>false</incremental>
-							<optimizationLevel>FULL</optimizationLevel>
-							<targetType>WEBASSEMBLY_GC</targetType>
-						</configuration>
-					</execution-->
 					<execution>
 						<id>web-client</id>
 						<goals>
