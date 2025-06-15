@@ -1,4 +1,4 @@
-package com.b2x2.core;
+package com.b2x2.core.id;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +33,7 @@ public class Base62Test {
         Base62.encode(0, buffer, 0, 9);
         Base62.encode(0, buffer, 9, 11);
 
-        assertEquals("XXXXXXXXXXXXXXXXXXXX", new String(buffer));
+        assertEquals("00000000000000000000", new String(buffer));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class Base62Test {
         Base62.encode(1, buffer, 0, 9);
         Base62.encode(1, buffer, 9, 11);
 
-        assertEquals("YXXXXXXXXYXXXXXXXXXX", new String(buffer));
+        assertEquals("00000000100000000001", new String(buffer));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class Base62Test {
         Base62.encode(61, buffer, 0, 9);
         Base62.encode(61, buffer, 9, 11);
 
-        assertEquals("9XXXXXXXX9XXXXXXXXXX", new String(buffer));
+        assertEquals("00000000z0000000000z", new String(buffer));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class Base62Test {
         Base62.encode(3843, buffer, 0, 9);
         Base62.encode(3843, buffer, 9, 11);
 
-        assertEquals("99XXXXXXX99XXXXXXXXX", new String(buffer));
+        assertEquals("0000000zz000000000zz", new String(buffer));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class Base62Test {
         Base62.encode(238327, buffer, 0, 9);
         Base62.encode(238327, buffer, 9, 11);
 
-        assertEquals("999XXXXXX999XXXXXXXX", new String(buffer));
+        assertEquals("000000zzz00000000zzz", new String(buffer));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class Base62Test {
         char[] buffer = new char[11];
         Base62.encode(Long.MAX_VALUE, buffer, 0, 11);
 
-        assertEquals("EwFCiXxFS9H", new String(buffer));
+        assertEquals("AzL8n0Y58m7", new String(buffer));
     }
 
     @Test
@@ -116,21 +116,21 @@ public class Base62Test {
 
     @Test
     public void decode_0_filled() {
-        long result11 = Base62.decode("XXXXXXXXXXX".toCharArray(), 0, 11);
+        long result11 = Base62.decode("00000000000".toCharArray(), 0, 11);
 
         assertEquals(0L, result11);
     }
 
     @Test
     public void decode_1() {
-        long result11 = Base62.decode("Y".toCharArray(), 0, 1);
+        long result11 = Base62.decode("1".toCharArray(), 0, 1);
 
         assertEquals(1L, result11);
     }
 
     @Test
     public void decode_1_filled() {
-        long result11 = Base62.decode("YXXXXXXXXXXX".toCharArray(), 0, 11);
+        long result11 = Base62.decode("00000000001".toCharArray(), 0, 11);
 
         assertEquals(1L, result11);
     }
@@ -162,7 +162,7 @@ public class Base62Test {
 
     @Test
     public void decode_max() {
-        long result = Base62.decode("EwFCiXxFS9H".toCharArray(), 0, 11);
+        long result = Base62.decode("AzL8n0Y58m7".toCharArray(), 0, 11);
 
         assertEquals(Long.MAX_VALUE, result);
     }

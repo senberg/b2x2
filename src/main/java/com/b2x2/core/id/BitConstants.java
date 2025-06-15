@@ -1,4 +1,4 @@
-package com.b2x2.core;
+package com.b2x2.core.id;
 
 public class BitConstants {
 
